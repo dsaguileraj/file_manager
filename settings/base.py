@@ -28,6 +28,7 @@ SECRET_KEY = 'django-insecure-t@&+5840ucmw)%dga+170_)2fuf%0=ibejp4%)q8%c*h=zy8er
 
 CUSTOM_APPS = [
     'apps.authentication',
+    'apps.management',
 ]
 
 DJANGO_APPS = [
