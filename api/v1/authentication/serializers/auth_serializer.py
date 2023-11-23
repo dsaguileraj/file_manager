@@ -1,11 +1,13 @@
 from django.contrib.auth.models import User
 from rest_framework.serializers import ValidationError, ModelSerializer
+import re
 
 
 class UserSerializer(ModelSerializer):
     class Meta:
         model = User
         fields = (
+            "id",
             "username",
             "first_name",
             "last_name",
@@ -18,7 +20,11 @@ class UserSerializer(ModelSerializer):
         }
 
     def validate_email(self, value):
-        if User.objects.filter(email=value).exists():
+        email_regex = r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b"
+        if not re.match(email_regex, value):
+            raise ValidationError("Formato de email inválido.")
+        user_id = self.instance.id if self.instance else None
+        if User.objects.exclude(id=user_id).filter(email=value).exists():
             raise ValidationError(
                 "Un usuario con este email ya existe.")
         return value
