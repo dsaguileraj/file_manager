@@ -1,13 +1,8 @@
-from django.contrib.auth.hashers import make_password
-from django.contrib.auth.models import User
 from rest_framework import status
-from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 
-from api.v1.authentication.serializers.user_serializer import UserSerializer
 from api.v1.authentication.services.auth_service import AuthService
 from file_manager.views import BaseViewSet
-from django.contrib.auth import authenticate
 
 # ... tus importaciones existentes ...
 
@@ -22,7 +17,7 @@ class AuthHandler(BaseViewSet):
         - email:str
         - password:str
         """
-        token, errors = self.srv.signup(**request.data):
+        token, errors = self.srv.signup(**request.data)
         if not errors:
             return Response({"token": token.key}, status=status.HTTP_201_CREATED)
         return Response(errors, status=status.HTTP_400_BAD_REQUEST)
