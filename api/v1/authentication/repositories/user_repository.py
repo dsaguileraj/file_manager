@@ -3,7 +3,7 @@ from contextlib import suppress
 from django.contrib.auth.models import User
 
 
-class AuthRepository:
+class UserRepository:
 
     @staticmethod
     def get_one(id: int):

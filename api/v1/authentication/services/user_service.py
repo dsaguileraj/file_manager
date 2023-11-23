@@ -1,10 +1,10 @@
-from api.v1.authentication.repositories.auth_repository import AuthRepository
+from api.v1.authentication.repositories.user_repository import UserRepository
 
 
-class AuthService:
+class UserService:
 
     def __init__(self) -> None:
-        self.repo = AuthRepository
+        self.repo = UserRepository
 
     def get_one(self, id: int = None, filters: dict = None):
         if id:
