@@ -1,49 +1,38 @@
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth.models import User
 from rest_framework import status
+from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 
 from api.v1.authentication.serializers.user_serializer import UserSerializer
-from api.v1.authentication.services.user_service import UserService
+from api.v1.authentication.services.auth_service import AuthService
 from file_manager.views import BaseViewSet
-from utils.clean_data import CleanData
+from django.contrib.auth import authenticate
+
+# ... tus importaciones existentes ...
 
 
-class UserHandler(BaseViewSet):
-    srv = UserService()
+class AuthHandler(BaseViewSet):
+    srv = AuthService()
 
-    def retrieve(self, request, id):
-        if not (user := self.srv.get_one(id)):
-            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
-        serializer = UserSerializer(user, many=False)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    def signup(self, request):
+        """
+        Request:
+        - username:str
+        - email:str
+        - password:str
+        """
+        token, errors = self.srv.signup(**request.data):
+        if not errors:
+            return Response({"token": token.key}, status=status.HTTP_201_CREATED)
+        return Response(errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def list(self, request):
-        filters = CleanData.clean_filters(request.GET.dict())
-        users = self.srv.get_all(filters)
-        serializer = UserSerializer(users, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    def create(self, request):
-        data = request.data
-        user_serializer = UserSerializer(data=data, partial=False)
-        if not user_serializer.is_valid():
-            return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        user_serializer.save()
-        return Response(user_serializer.data, status=status.HTTP_201_CREATED)
-
-    def update(self, request, id):
-        if not (user := self.srv.get_one(id)):
-            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
-        data = request.data
-        serializer = UserSerializer(user, data=data, partial=True)
-        if not serializer.is_valid():
-            return Response(serializer.errors,
-                            status=status.HTTP_400_BAD_REQUEST)
-        serializer.save()
-        return Response(serializer.data,
-                        status=status.HTTP_200_OK)
-
-    def delete(self, request, id):
-        if not (user := self.srv.get_one(id)):
-            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
-        user.delete()
-        return Response({}, status=status.HTTP_200_OK)
+    def login(self, request):
+        """
+        Request:
+        - username:str
+        - password:str
+        """
+        if token := self.srv.login(**request.data):
+            return Response({"token": token.key}, status=status.HTTP_200_OK)
+        return Response({"error": "Credenciales inválidas"}, status=status.HTTP_400_BAD_REQUEST)

@@ -9,8 +9,6 @@ class UserSerializer(ModelSerializer):
         fields = (
             "id",
             "username",
-            "first_name",
-            "last_name",
             "email",
             "password")
         extra_kwargs = {
