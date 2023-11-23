@@ -1,8 +1,8 @@
 from rest_framework import status
 from rest_framework.response import Response
 
-from api.v1.authentication.serializers.auth_serializer import UserSerializer
-from api.v1.authentication.services.auth_service import AuthService
+from api.v1.serializers.auth_serializer import UserSerializer
+from api.v1.services.auth_service import AuthService
 from file_manager.views import BaseViewSet
 from utils.clean_data import CleanData
 
