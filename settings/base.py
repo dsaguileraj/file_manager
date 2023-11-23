@@ -26,11 +26,6 @@ SECRET_KEY = 'django-insecure-t@&+5840ucmw)%dga+170_)2fuf%0=ibejp4%)q8%c*h=zy8er
 # Application definition
 
 
-CUSTOM_APPS = [
-    'apps.authentication',
-    'apps.management',
-]
-
 DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -40,8 +35,17 @@ DJANGO_APPS = [
     'django.contrib.staticfiles',
 ]
 
+CUSTOM_APPS = [
+    'apps.authentication',
+    'apps.management',
+]
 
-INSTALLED_APPS = DJANGO_APPS + CUSTOM_APPS
+THIRD_PARTY_APPS = [
+    'rest_framework',
+]
+
+
+INSTALLED_APPS = DJANGO_APPS + CUSTOM_APPS + THIRD_PARTY_APPS
 
 
 MIDDLEWARE = [
@@ -126,3 +130,12 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+TOKEN_AUTHENTICATION = False
+
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    )
+}
