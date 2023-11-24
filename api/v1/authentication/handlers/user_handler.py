@@ -27,8 +27,8 @@ class UserHandler(BaseViewSet):
         user_serializer = UserSerializer(data=data, partial=False)
         if not user_serializer.is_valid():
             return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        user_serializer.save()
-        return Response(user_serializer.data, status=status.HTTP_201_CREATED)
+        user = self.srv.create_user(**data)
+        return Response(UserSerializer(user).data, status=status.HTTP_201_CREATED)
 
     def update(self, request, id):
         if not (user := self.srv.get_one(id)):

@@ -1,5 +1,7 @@
 from api.v1.authentication.repositories.user_repository import UserRepository
 
+from django.contrib.auth.models import User
+
 
 class UserService:
 
@@ -13,3 +15,8 @@ class UserService:
 
     def get_all(self, filters: dict = None):
         return self.repo.get_all(filters)
+
+    def create_user(self, username: str, email: str, password: str):
+        return User.objects.create_user(username=username,
+                                        email=email,
+                                        password=password)
