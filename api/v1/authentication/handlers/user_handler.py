@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from api.v1.authentication.serializers.user_serializer import UserSerializer
 from api.v1.authentication.services.user_service import UserService
 from file_manager.views import BaseViewSet
-from utils.clean_data import CleanData
+from resources.utils.clean_data import CleanData
 
 
 class UserHandler(BaseViewSet):

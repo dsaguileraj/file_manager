@@ -17,10 +17,10 @@ class AuthHandler(BaseViewSet):
         - email:str
         - password:str
         """
-        token, errors = self.srv.signup(**request.data)
-        if not errors:
+        token, user = self.srv.signup(**request.data)
+        if not user:
             return Response({"token": token.key}, status=status.HTTP_201_CREATED)
-        return Response(errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
     def login(self, request):
         """
@@ -28,6 +28,7 @@ class AuthHandler(BaseViewSet):
         - username:str
         - password:str
         """
-        if token := self.srv.login(**request.data):
+        token, user = self.srv.login(**request.data)
+        if user:
             return Response({"token": token.key}, status=status.HTTP_200_OK)
         return Response({"error": "Credenciales inválidas"}, status=status.HTTP_400_BAD_REQUEST)

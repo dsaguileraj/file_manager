@@ -15,13 +15,15 @@ class AuthService:
     def login(self, username: str, password: str):
         if user := authenticate(username=username,
                                 password=password):
-            return self.generate_token(user)
+            return self.generate_token(user), user
+        return None, None
 
     def signup(self, username: str, email: str, password: str):
-        user = User.objects.create_user(username=username,
-                                        email=email,
-                                        password=password)
-        return self.generate_token(user)
+        if user := User.objects.create_user(username=username,
+                                            email=email,
+                                            password=password):
+            return self.generate_token(user), user
+        return None, None
 
     def generate_token(self, user: User):
         token, _ = Token.objects.get_or_create(user=user)
