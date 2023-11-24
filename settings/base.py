@@ -135,9 +135,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 TOKEN_AUTHENTICATION = False
-
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
     )
 }
+
+MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = '/media/'
