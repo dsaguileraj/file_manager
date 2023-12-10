@@ -7,8 +7,10 @@ class FileSerializer(ModelSerializer):
     class Meta:
         model = File
         fields = (
+            "id",
+            "user",
             "name",
-            "descirption",
+            "description",
             "url",
             "created_at",
             "updated_at",

@@ -1,0 +1,40 @@
+{% extends 'base/base.html' %}
+
+{% block extra_header %}
+<title></title>
+{% endblock extra_header %}
+
+
+
+
+{% block content %}
+<div class="container mt-5">
+  <h2>{{ form_title }}</h2>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="text" name="method" value="{{ method }}">
+    <div class="mb-3">
+      <label for="name" class="form-label">Nombre</label>
+      <input type="text" class="form-control" name="name" id="name" value="{{ file.name }}" required>
+    </div>
+    <div class="mb-3">
+      <label for="description" class="form-label">Descripción</label>
+      <textarea class="form-control" name="description" id="description">{{ file.description }}</textarea>
+    </div>
+    <div class="mb-3">
+      <label for="url" class="form-label">URL</label>
+      <input type="text" class="form-control" name="url" id="url" value="{{ file.url }}" disabled>
+    </div>
+    <div class="mb-3">
+      <label for="file_upload" class="form-label">Archivo</label>
+      <input type="file" class="form-control" name="file_upload" id="file_upload">
+    </div>
+    <button type="submit" class="btn btn-primary">{{ button_text }}</button>
+    {% if file.url %}
+    <a href="{{ file.url }}" download class="btn btn-secondary">
+      Descargar Archivo
+    </a>
+    {% endif %}
+  </form>
+</div>
+{% endblock %}

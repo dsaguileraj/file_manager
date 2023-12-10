@@ -15,3 +15,7 @@ class FileRepository:
         if not filters:
             filters = {}
         return File.objects.filter(**filters).order_by("-created_at")
+
+    @staticmethod
+    def get_empty():
+        return File()
