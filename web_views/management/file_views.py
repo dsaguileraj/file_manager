@@ -1,17 +1,20 @@
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views.decorators.gzip import gzip_page
 
-from api.v1.management.services.file_service import FileService
 from api.v1.management.handlers.file_handler import FileHandler
+from api.v1.management.services.file_service import FileService
 
 
 @gzip_page
+# @login_required(login_url='/auth/login/')
 def list_files(request):
     srv = FileService()
     template = "management/file/list.html"
-    if request.session.is_empty():
+    if not request.user.is_authenticated:
         return HttpResponseRedirect("/auth/login/")
+    print({"user": request.user})
     files = srv.get_all({"user": request.user})
     return render(request, template, {"files": files})
 
@@ -20,7 +23,7 @@ def list_files(request):
 def edit_file(request, id: int = None):
     srv = FileService()
     template = "management/file/form.html"
-    if request.session.is_empty():
+    if not request.user.is_authenticated:
         return HttpResponseRedirect("/auth/login/")
     if id:
         method = "PUT"
@@ -51,6 +54,8 @@ def edit_file(request, id: int = None):
 
 @gzip_page
 def delete_file(request, id: int = None):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect("/auth/login/")
     handler = FileHandler()
     handler.delete(request, id)
     return HttpResponseRedirect("/management/file/")

@@ -17,7 +17,7 @@ def logout_view(request, lang=None):
 def login_view(request):
     srv = AuthService()
     template = "auth/login.html"
-    if not request.session.is_empty():
+    if request.user.is_authenticated:
         return HttpResponseRedirect("/management/file/")
     if request.method == "POST":
         username = request.POST.get("username")
@@ -28,6 +28,7 @@ def login_view(request):
             request.session["id"] = user.id
             request.session["username"] = user.username
             request.session["token"] = token.key
+            login(request, user)
             return HttpResponseRedirect("/management/file/")
         return render(request, template, {"error": True})
     elif request.method == "GET":
@@ -38,17 +39,20 @@ def login_view(request):
 def signup_view(request):
     srv = AuthService()
     template = "auth/signup.html"
-    if not request.session.is_empty():
+    if request.user.is_authenticated:
         return HttpResponseRedirect("/management/file/")
     if request.method == "POST":
         username = request.POST.get("username", "")
         email = request.POST.get("email", "")
         password = request.POST.get("password", "")
-        if token := srv.signup(username=username,
-                               password=password,
-                               email=email):
+        token, user = srv.signup(username=username,
+                                 password=password,
+                                 email=email)
+        if token and user:
+            request.session["id"] = user.id
             request.session["username"] = username
             request.session["token"] = token.key
+            login(request, user)
             return HttpResponseRedirect("/management/file/")
         return render(request, template, {"error": True})
     elif request.method == "GET":
