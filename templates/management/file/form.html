@@ -12,7 +12,7 @@
   <h2>{{ form_title }}</h2>
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    <input type="text" name="method" value="{{ method }}">
+    <input type="text" name="method" value="{{ method }}" hidden>
     <div class="mb-3">
       <label for="name" class="form-label">Nombre</label>
       <input type="text" class="form-control" name="name" id="name" value="{{ file.name }}" required>
