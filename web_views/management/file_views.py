@@ -1,4 +1,3 @@
-from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views.decorators.gzip import gzip_page
@@ -8,7 +7,6 @@ from api.v1.management.services.file_service import FileService
 
 
 @gzip_page
-# @login_required(login_url='/auth/login/')
 def list_files(request):
     srv = FileService()
     template = "management/file/list.html"
