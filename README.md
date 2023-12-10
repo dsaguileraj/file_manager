@@ -34,6 +34,12 @@ urllib3==2.1.0
 python -m pip install -r requirements.txt
 ```
 
+### Iniciar base de datos
+
+```
+python manage.py migrate
+```
+
 ### Correr el servidor
 ```
 python manage.py runserver
