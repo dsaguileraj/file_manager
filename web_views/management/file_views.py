@@ -14,7 +14,6 @@ def list_files(request):
     template = "management/file/list.html"
     if not request.user.is_authenticated:
         return HttpResponseRedirect("/auth/login/")
-    print({"user": request.user})
     files = srv.get_all({"user": request.user})
     return render(request, template, {"files": files})
 
